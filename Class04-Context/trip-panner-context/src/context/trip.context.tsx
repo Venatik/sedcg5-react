@@ -6,7 +6,7 @@ interface UserMe {
   city: string;
 }
 
-// STEP 1: Interface of how our context will look like. Meaning this are the values that are going to be shared within the components using the context
+// STEP 1: Interface of how our context will look like. Meaning these are the values that are going to be shared within the components using the context
 interface TripContext {
   plannedTrips: Trip[];
   handleRemoveTrip: (id: number) => void;
