@@ -44,3 +44,11 @@ export const deleteTrip = async (tripId: string) => {
 
   return data;
 };
+
+export const getTripDetails = async (tripId: string) => {
+  const response = await fetch(`http://localhost:3000/trip/${tripId}`);
+
+  const data: Trip = await response.json();
+
+  return data;
+};

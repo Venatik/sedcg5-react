@@ -1,20 +1,26 @@
 import { createContext, ReactNode, useState, useEffect } from "react";
 import { DraftTrip, Trip } from "../types/trip";
-import { deleteTrip, fetchTrips } from "../services/trip.service";
+import {
+  deleteTrip,
+  fetchTrips,
+  getTripDetails,
+} from "../services/trip.service";
 import { createTrip } from "../services/trip.service";
 
 interface TripContext {
   plannedTrips: Trip[];
-  handleCreateTrip: (draftTrip: DraftTrip) => Promise<void>;
   isLoading: boolean;
+  handleCreateTrip: (draftTrip: DraftTrip) => Promise<void>;
   handleDeleteTrip: (tripId: string) => Promise<void>;
+  handleGetTripById: (tripId: string) => Promise<Trip | undefined>;
 }
 
 const defaultContextValues: TripContext = {
   plannedTrips: [],
-  handleCreateTrip: async () => {},
   isLoading: false,
+  handleCreateTrip: async () => {},
   handleDeleteTrip: async () => {},
+  handleGetTripById: async () => ({} as Trip),
 };
 
 createContext(defaultContextValues); // This is the context object that we will use in our components
@@ -69,8 +75,28 @@ export const TripContextProvider = ({ children }: TripContextProviderProps) => {
 
     try {
       const data = await deleteTrip(tripId);
-      await handleFetchTrips();
+      // OPTION 1 - Refetch the updated trips from the server
+      // await handleFetchTrips();
+
+      // OPTION 2 - Update the state locally (without refetching the data from the server)
+      const remaining = trips.filter(trip => trip.id !== tripId);
+      setTrips(remaining);
+
       console.log(data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGetTripById = async (tripId: string) => {
+    setIsLoading(true);
+
+    try {
+      const tripDetails = await getTripDetails(tripId);
+
+      return tripDetails;
     } catch (error) {
       console.log(error);
     } finally {
@@ -97,6 +123,7 @@ export const TripContextProvider = ({ children }: TripContextProviderProps) => {
         handleCreateTrip,
         isLoading,
         handleDeleteTrip,
+        handleGetTripById,
       }}
     >
       {children}
