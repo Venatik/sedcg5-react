@@ -1,0 +1,29 @@
+.editForm {
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+  gap: 20px;
+}
+
+.editForm input {
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+  outline-color: #ff6f61;
+}
+
+.editForm button {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.save {
+  background-color: #ff6f61;
+  color: white;
+  border: none;
+}
+
+.cancel {
+  background-color: white;
+  color: #ff6f61;
+  border: 1px solid #ff6f61;
+}
